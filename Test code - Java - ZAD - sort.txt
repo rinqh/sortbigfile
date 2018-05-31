@@ -1,0 +1,23 @@
+Sort a big text file using small memory.
+
+- Input: a text file (encoded in utf8) consists of multiple lines, the file can have any unicode characters, file size is at least 10GB.
+
+- Output: a text file, consists of input lines, sorted in natural order (i.e., order returned by strcmp or string::compare)
+
+- Sample input:
+cm rewoc
+beboeb
+vwe afs
+
+- Sample output:
+beboeb
+cm rewoc
+vwe afs
+
+- Resource limitation: heap_size < 1GB
+
+- Other requirements:
+ + Use a general-purpose programing language. Solutions using other techniques, like `sort in.txt > out.txt`, is not accepted.
+ + There must be a makefile (for C/C++) or pom.xml/build.gradle/build.sbt (for Java/Scala) or some other kind of buid script.
+ + Code will be built and executed on linux.
+
