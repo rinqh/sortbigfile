@@ -11,12 +11,13 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -26,7 +27,8 @@ import java.util.logging.Logger;
  */
 public class SortBigFile {
 
-    private int maxSize = 10;
+    //private int maxSize = 30;
+    private int maxSize = 100 * 1024 * 1024;
     private List<File> tmpFiles = new ArrayList<>();
 
     SortBigFile() {
@@ -55,15 +57,18 @@ public class SortBigFile {
                     File file = new File("tmp" + System.currentTimeMillis());
                     tmpFiles.add(file);
                     writeFile(lines, file);
+                    //System.out.println(lines);
                     lines.clear();
                 }
             }
-
-            Collections.sort(lines);
-            File file = new File("tmp" + System.currentTimeMillis());
-            tmpFiles.add(file);
-            writeFile(lines, file);
-            lines.clear();
+            if (!lines.isEmpty()) {
+                //System.out.println(lines);
+                Collections.sort(lines);
+                File file = new File("tmp" + System.currentTimeMillis());
+                tmpFiles.add(file);
+                writeFile(lines, file);
+                lines.clear();
+            }
         } catch (IOException ex) {
             Logger.getLogger(SortBigFile.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
         } finally {
@@ -101,36 +106,59 @@ public class SortBigFile {
     }
 
     public void mergeSort(String outputFile) {
-        Map<String, BufferedReader> map = new HashMap<>();
+        int currentSize = 0;
+        List<String> writes = new ArrayList<>();
+        List<Wrapper> wrappers = new ArrayList<>();
+        CompareWrapper compare = new CompareWrapper();
         List<BufferedReader> readers = new ArrayList<>();
         BufferedWriter writer = null;
+        File f = new File(outputFile);
+        if (f.exists()) {
+            f.delete();
+        }
         try {
-            writer = new BufferedWriter(new FileWriter(outputFile));
+            writer = new BufferedWriter(new FileWriter(outputFile, true));
             System.err.println(tmpFiles.size());
             for (int i = 0; i < tmpFiles.size(); i++) {
                 BufferedReader reader = new BufferedReader(new FileReader(tmpFiles.get(i)));
                 readers.add(reader);
                 String line = reader.readLine();
                 if (line != null) {
-                    map.put(line, readers.get(i));
+                    Wrapper wrapper = new Wrapper(line);
+                    wrapper.index = i;
+                    wrappers.add(wrapper);
                 }
             }
-            List<String> sorted = new LinkedList<>(map.keySet());
-            while (map.size() > 0) {
-                Collections.sort(sorted);
-                String line = sorted.remove(0);
-                writer.write(line);
-                writer.write(System.lineSeparator());
-                System.err.println(line);
-                BufferedReader reader = map.remove(line);
-                if (reader == null) {
-                    System.err.println("reader null");
+            while (wrappers.size() > 0) {
+                Collections.sort(wrappers, compare);
+                Wrapper line = wrappers.remove(0);
+                writes.add(line.string);
+                currentSize += line.string.length() + 1;
+                if (currentSize >= maxSize) {
+                    currentSize = 0;
+                    //appendFile(writes, writer);
+                    appendFileUsingNIO(writes, outputFile);
+                    writes.clear();
                 }
+//                writer.write(line.string);
+//                writer.write(System.lineSeparator());
+                //System.err.println(line);
+                //BufferedReader reader = map.remove(line);
+                BufferedReader reader = readers.get(line.index);
+//                if (reader == null) {
+//                    System.err.println("reader null");
+//                }
                 String nextLine = reader.readLine();
                 if (nextLine != null) {
-                    map.put(nextLine, reader);
-                    sorted.add(nextLine);
+                    Wrapper newWrapper = new Wrapper(nextLine);
+                    newWrapper.index = line.index;
+                    wrappers.add(newWrapper);
                 }
+            }
+            if (!writes.isEmpty()) {
+                //appendFile(writes, writer);
+                appendFileUsingNIO(writes, outputFile);
+                writes.clear();
             }
         } catch (IOException ex) {
             Logger.getLogger(SortBigFile.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
@@ -155,6 +183,29 @@ public class SortBigFile {
             }
         }
 
+    }
+
+    private void appendFile(List<String> writes, BufferedWriter writer) throws IOException {
+        for (String s : writes) {
+            writer.write(s);
+            writer.newLine();
+        }
+    }
+
+    private void appendFileUsingNIO(List<String> writes, String outputFile) throws IOException {
+        Path filePathObj = Paths.get(outputFile);
+        boolean fileExists = Files.exists(filePathObj);
+        if (!fileExists) {
+            Files.createFile(filePathObj);
+        }
+        // Appending The New Data To The Existing File
+
+        for (String s : writes) {
+            Files.write(filePathObj, s.getBytes(), StandardOpenOption.APPEND);
+            Files.write(filePathObj, System.lineSeparator().getBytes(), StandardOpenOption.APPEND);
+            //writer.write(s);
+            //writer.newLine();
+        }
     }
 
 }
