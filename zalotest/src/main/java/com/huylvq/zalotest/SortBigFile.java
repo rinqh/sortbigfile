@@ -18,6 +18,10 @@ import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -30,6 +34,8 @@ public class SortBigFile {
     //private int maxSize = 30;
     private int maxSize = 100 * 1024 * 1024;
     private List<File> tmpFiles = new ArrayList<>();
+    ExecutorService executor = Executors.newSingleThreadExecutor();
+    private Future<?> future;
 
     SortBigFile() {
     }
@@ -107,7 +113,10 @@ public class SortBigFile {
 
     public void mergeSort(String outputFile) {
         int currentSize = 0;
-        List<String> writes = new ArrayList<>();
+        int index = 0;
+        List<List<String>> writes = new ArrayList<>();
+        writes.add(new ArrayList<>());
+        writes.add(new ArrayList<>());
         List<Wrapper> wrappers = new ArrayList<>();
         CompareWrapper compare = new CompareWrapper();
         List<BufferedReader> readers = new ArrayList<>();
@@ -132,13 +141,15 @@ public class SortBigFile {
             while (wrappers.size() > 0) {
                 Collections.sort(wrappers, compare);
                 Wrapper line = wrappers.remove(0);
-                writes.add(line.string);
+                writes.get(index).add(line.string);
                 currentSize += line.string.length() + 1;
                 if (currentSize >= maxSize) {
                     currentSize = 0;
-                    //appendFile(writes, writer);
-                    appendFileUsingNIO(writes, outputFile);
-                    writes.clear();
+                    appendFileUsingThread(writes.get(index), writer);
+                    //appendFile(writes.get(index), writer);
+                    //appendFileUsingNIO(writes, outputFile);
+                    index = index == 1 ? 0 : 1;
+                    writes.get(index).clear();
                 }
 //                writer.write(line.string);
 //                writer.write(System.lineSeparator());
@@ -156,13 +167,17 @@ public class SortBigFile {
                 }
             }
             if (!writes.isEmpty()) {
-                //appendFile(writes, writer);
-                appendFileUsingNIO(writes, outputFile);
+                appendFileUsingThread(writes.get(index), writer);
+                if (future != null && !future.isDone()) {
+                    future.get();
+                }
+                writes.get(index).clear();
                 writes.clear();
             }
-        } catch (IOException ex) {
+        } catch (IOException | InterruptedException | ExecutionException ex) {
             Logger.getLogger(SortBigFile.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
         } finally {
+            executor.shutdown();
             for (int i = 0; i < readers.size(); i++) {
                 try {
                     readers.get(i).close();
@@ -206,6 +221,34 @@ public class SortBigFile {
             //writer.write(s);
             //writer.newLine();
         }
+    }
+
+    private void appendFileUsingThread(List<String> writes, BufferedWriter writer) throws IOException, InterruptedException, ExecutionException {
+        if (future != null && !future.isDone()) {
+            future.get();
+        }
+
+        future = executor.submit(new Runnable() {
+            @Override
+            public void run() {
+                //System.out.println("Thread run!!!");
+                //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                for (String s : writes) {
+                    try {
+                        writer.write(s);
+                        writer.newLine();
+                    } catch (IOException ex) {
+                        Logger.getLogger(SortBigFile.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
+                    }
+                }
+                //System.out.println("Thread done!!!");
+            }
+        });
+
+//        for (String s : writes) {
+//            writer.write(s);
+//            writer.newLine();
+//        }
     }
 
 }
