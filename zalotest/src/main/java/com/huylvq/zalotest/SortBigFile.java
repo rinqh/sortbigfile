@@ -18,10 +18,13 @@ import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -40,12 +43,16 @@ public class SortBigFile {
     SortBigFile() {
     }
 
-    void sort(String inputFile, String outputFile) {
-        spilitInput(inputFile);
-        mergeSort(outputFile);
+    void sort(String inputFile, String outputFile) throws InterruptedException, ExecutionException, IOException {
+//        spilitInput(inputFile);
+
+        //mergeSort(outputFile);
+        splitInput(inputFile);
+        mergeFile(outputFile);
     }
 
     void spilitInput(String inputFile) {
+        boolean test = true;
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         tmpFiles.clear();
         BufferedReader br = null;
@@ -55,6 +62,10 @@ public class SortBigFile {
             String line = null;
             int currChunkSize = 0;
             while ((line = br.readLine()) != null) {
+                if (test) {
+                    System.out.println(System.currentTimeMillis() + " Reading!!!");
+                    test = false;
+                }
                 lines.add(line);
                 currChunkSize += line.length() + 1;
                 if (currChunkSize >= maxSize) {
@@ -62,9 +73,12 @@ public class SortBigFile {
                     Collections.sort(lines);
                     File file = new File("tmp" + System.currentTimeMillis());
                     tmpFiles.add(file);
+                    System.out.println(System.currentTimeMillis() + " Start writing!!!");
                     writeFile(lines, file);
+                    System.out.println(System.currentTimeMillis() + " Done writing!!!");
                     //System.out.println(lines);
                     lines.clear();
+                    test = true;
                 }
             }
             if (!lines.isEmpty()) {
@@ -249,6 +263,63 @@ public class SortBigFile {
 //            writer.write(s);
 //            writer.newLine();
 //        }
+    }
+
+    void splitInput(String inputFile) throws InterruptedException, ExecutionException {
+        int maxBlockSize = 100 * 1024 * 1024;
+        MyQueue queue = new MyQueue();
+        ExecutorService threadPool = Executors.newFixedThreadPool(3);
+        List<Future<?>> futures = new ArrayList<>();
+
+        Future producerStatus = threadPool.submit(new ReadFileRunnable(queue, inputFile, tmpFiles, maxBlockSize));
+        Future consumer1Status = threadPool.submit(new WriteFileRunnable("Write 1", queue));
+        Future consumer2Status = threadPool.submit(new WriteFileRunnable("Write 2", queue));
+        futures.add(producerStatus);
+        futures.add(consumer1Status);
+        futures.add(consumer2Status);
+
+        for (Future<?> f : futures) {
+            //System.err.println("future");
+            f.get(); // get will block until the future is done
+        }
+        threadPool.shutdown();
+        System.out.println(tmpFiles.size());
+    }
+
+    private void mergeFile(String outputFile) {
+        ExecutorService exec = Executors.newSingleThreadExecutor();
+        BlockingQueue<String> queue = new LinkedBlockingDeque<>(1000);
+        MergeFileRunnable merge = new MergeFileRunnable(tmpFiles, queue, maxSize);
+        Future f = exec.submit(merge);
+        BufferedWriter writer = null;
+        try {
+            writer = new BufferedWriter(new FileWriter(outputFile));
+            String line;
+            while (true) {
+                line = queue.poll(1, TimeUnit.SECONDS);
+                if (line != null) {
+                    writer.write(line);
+                    writer.newLine();
+                }
+                if (f.isDone() && queue.isEmpty()) {
+                    break;
+                }
+            }
+
+        } catch (IOException | InterruptedException ex) {
+            Logger.getLogger(SortBigFile.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
+        } finally {
+            f.cancel(true);
+            exec.shutdown();
+            try {
+                if (writer != null) {
+                    writer.flush();
+                    writer.close();
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(SortBigFile.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
+            }
+        }
     }
 
 }
