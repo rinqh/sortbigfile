@@ -35,7 +35,7 @@ import java.util.logging.Logger;
 public class SortBigFile {
 
     //private int maxSize = 30;
-    private int maxSize = 100 * 1024 * 1024;
+    private final int maxSize = 100 * 1024 * 1024;
     private List<File> tmpFiles = new ArrayList<>();
     ExecutorService executor = Executors.newSingleThreadExecutor();
     private Future<?> future;
@@ -47,8 +47,11 @@ public class SortBigFile {
 //        spilitInput(inputFile);
 
         //mergeSort(outputFile);
+        System.out.println("Starting " + System.currentTimeMillis());
         splitInput(inputFile);
+        System.out.println("Done split, start merge " + System.currentTimeMillis());
         mergeFile(outputFile);
+        System.out.println("Done " + System.currentTimeMillis());
     }
 
     void spilitInput(String inputFile) {
@@ -267,6 +270,7 @@ public class SortBigFile {
 
     void splitInput(String inputFile) throws InterruptedException, ExecutionException {
         int maxBlockSize = 100 * 1024 * 1024;
+        //int maxBlockSize = 10 * 1024;
         MyQueue queue = new MyQueue();
         ExecutorService threadPool = Executors.newFixedThreadPool(3);
         List<Future<?>> futures = new ArrayList<>();
@@ -301,6 +305,14 @@ public class SortBigFile {
                     writer.write(line);
                     writer.newLine();
                 }
+//                if (f.isDone()) {
+//                    System.out.println("done");
+//                    //break;
+//                }
+//                if (queue.isEmpty()) {
+//                    System.out.println("empty");
+//                    //break;
+//                }
                 if (f.isDone() && queue.isEmpty()) {
                     break;
                 }
