@@ -9,6 +9,10 @@ Idea:
   - Get the next line in the temporary file containing the item writing down
   - Continue until no string left in list
 
-Usage:
-  - Provide 2 arguments for binary: input file path and output file path
+# Run
+java -jar target/zalotest-1.0-SNAPSHOT.jar input.txt output.txt
+
+with input.txt: input file
+     output.txt: output file
+
   
