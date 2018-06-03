@@ -30,8 +30,10 @@ public class Main {
             System.err.println(inputFile + " does not exist! Exitting!");
             return;
         }
+        System.out.println("Running...Please wait...");
         //SortBigFile sorter = new SortBigFile(inputFile, outputFile);
         SortBigFileUsingMultithread sorter = new SortBigFileUsingMultithread(inputFile, outputFile);
         sorter.sort();
+        System.out.println("Done!");
     }
 }
