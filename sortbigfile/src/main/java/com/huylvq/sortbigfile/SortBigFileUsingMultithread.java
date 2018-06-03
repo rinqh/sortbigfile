@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.huylvq.zalotest;
+package com.huylvq.sortbigfile;
 
-import com.huylvq.zalotest.data.MyQueue;
-import com.huylvq.zalotest.runnable.MergeFileRunnable;
-import com.huylvq.zalotest.runnable.ReadFileRunnable;
-import com.huylvq.zalotest.runnable.WriteFileRunnable;
+import com.huylvq.sortbigfile.data.MyQueue;
+import com.huylvq.sortbigfile.runnable.MergeFileRunnable;
+import com.huylvq.sortbigfile.runnable.ReadFileRunnable;
+import com.huylvq.sortbigfile.runnable.WriteFileRunnable;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;

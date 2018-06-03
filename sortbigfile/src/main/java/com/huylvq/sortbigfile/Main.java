@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.huylvq.zalotest;
+package com.huylvq.sortbigfile;
 
 import java.io.File;
 

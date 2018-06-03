@@ -1,3 +1,6 @@
-/zalotest/target/
-/zalotest/*.txt
-/zalotest/nbproject/
+/sortbigfile/target/
+/sortbigfile/nbproject/
+sortbigfile/*.txt
+
+
+

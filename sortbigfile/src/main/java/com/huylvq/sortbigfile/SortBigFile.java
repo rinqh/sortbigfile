@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.huylvq.zalotest;
+package com.huylvq.sortbigfile;
 
-import com.huylvq.zalotest.data.CompareWrapper;
-import com.huylvq.zalotest.data.Wrapper;
+import com.huylvq.sortbigfile.data.CompareWrapper;
+import com.huylvq.sortbigfile.data.Wrapper;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
