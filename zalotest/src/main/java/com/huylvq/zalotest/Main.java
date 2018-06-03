@@ -29,8 +29,8 @@ public class Main {
             System.err.println(inputFile + " does not exist! Exitting!");
             return;
         }
-        SortBigFile sorter = new SortBigFile(inputFile, outputFile);
-        //SortBigFileUsingMultithread sorter = new SortBigFileUsingMultithread(inputFile, outputFile);
+        //SortBigFile sorter = new SortBigFile(inputFile, outputFile);
+        SortBigFileUsingMultithread sorter = new SortBigFileUsingMultithread(inputFile, outputFile);
         sorter.sort();
     }
 }

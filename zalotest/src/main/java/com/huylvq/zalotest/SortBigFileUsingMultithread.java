@@ -60,11 +60,11 @@ public class SortBigFileUsingMultithread {
      */
     public void sort(){
         try {
-            System.out.println("Starting " + System.currentTimeMillis());
+//            System.out.println("Starting " + System.currentTimeMillis());
             splitInput();
-            System.out.println("Done split, start merge " + System.currentTimeMillis());
+//            System.out.println("Done split, start merge " + System.currentTimeMillis());
             mergeFile();
-            System.out.println("Done " + System.currentTimeMillis());
+//            System.out.println("Done " + System.currentTimeMillis());
         } catch (InterruptedException | ExecutionException ex) {
             Logger.getLogger(SortBigFileUsingMultithread.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
         }

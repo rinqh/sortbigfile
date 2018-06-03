@@ -45,11 +45,11 @@ public class SortBigFile {
 
     
     void sort() {
-        System.out.println("Starting " + System.currentTimeMillis());
+//        System.out.println("Starting " + System.currentTimeMillis());
         splitInput(inputFile);
-        System.out.println("Done split, start merge " + System.currentTimeMillis());
+//        System.out.println("Done split, start merge " + System.currentTimeMillis());
         mergeSort(outputFile);
-        System.out.println("Done " + System.currentTimeMillis());
+//        System.out.println("Done " + System.currentTimeMillis());
     }
 
     void splitInput(String inputFile) {
