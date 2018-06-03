@@ -1,6 +1,7 @@
 /sortbigfile/target/
 /sortbigfile/nbproject/
 sortbigfile/*.txt
+sortbigfile/tmp*
 
 
 

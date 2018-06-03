@@ -20,7 +20,7 @@ public class Main {
     public static void main(String[] args) {
         if (args.length != 2) {
             System.err.println("Invalid input!");
-            System.err.println("USAGE: java -jar target/zalotest/zalotest-1.0-SNAPSHOT.jar inputfile outputfile");
+            System.err.println("USAGE: java -jar target/sortbigfile/sortbigfile-1.0-SNAPSHOT.jar inputfile outputfile");
             return;
         }
         String inputFile = args[0];
