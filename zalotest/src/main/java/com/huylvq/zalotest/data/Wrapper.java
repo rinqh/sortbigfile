@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.huylvq.zalotest;
+package com.huylvq.zalotest.data;
 
 /**
  *
@@ -11,10 +11,21 @@ package com.huylvq.zalotest;
  */
 public class Wrapper {
 
-    String string;
-    int index;          //Use for reader stream index in readers list when merge file
+    /**
+     *
+     */
+    public String string;
 
-    Wrapper(String line) {
+    /**
+     *
+     */
+    public int index;          //Use for reader stream index in readers list when merge file
+
+    /**
+     *
+     * @param line
+     */
+    public Wrapper(String line) {
         this.string = line;
         this.index = 0;
     }

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.huylvq.zalotest;
+package com.huylvq.zalotest.data;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -15,22 +15,48 @@ import java.util.concurrent.TimeUnit;
  */
 public class MyQueue {
 
+    /**
+     *
+     */
     public BlockingQueue<MyData> queue = new LinkedBlockingDeque<>(5);
+
+    /**
+     *
+     */
     public Boolean continueProducing = Boolean.TRUE;
 
+    /**
+     *
+     * @param data
+     * @throws InterruptedException
+     */
     public void put(MyData data) throws InterruptedException {
         this.queue.put(data);
     }
 
+    /**
+     *
+     * @return
+     * @throws InterruptedException
+     */
     public MyData take() throws InterruptedException {
         return this.queue.take();
     }
     
+    /**
+     *
+     * @return
+     * @throws InterruptedException
+     */
     public MyData get() throws InterruptedException {
         return this.queue.poll(1, TimeUnit.SECONDS);
     }
 
-    boolean isEmpty() {
+    /**
+     *
+     * @return
+     */
+    public boolean isEmpty() {
         return this.queue.isEmpty();
     }
 }

@@ -3,8 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.huylvq.zalotest;
+package com.huylvq.zalotest.runnable;
 
+import com.huylvq.zalotest.data.MyData;
+import com.huylvq.zalotest.data.MyQueue;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -26,17 +28,35 @@ public class ReadFileRunnable implements Runnable {
     private List<File> listFile;
     private int maxSizeBlock;
 
+    /**
+     *
+     * @param queue
+     * @param input
+     */
     public ReadFileRunnable(MyQueue queue, String input) {
         this.queue = queue;
         this.input = input;
     }
 
+    /**
+     *
+     * @param queue
+     * @param input
+     * @param listFile
+     */
     public ReadFileRunnable(MyQueue queue, String input, List<File> listFile) {
         this.queue = queue;
         this.input = input;
         this.listFile = listFile;
     }
 
+    /**
+     *
+     * @param queue
+     * @param input
+     * @param listFile
+     * @param maxSizeBlock
+     */
     public ReadFileRunnable(MyQueue queue, String input, List<File> listFile, int maxSizeBlock) {
         this.queue = queue;
         this.input = input;

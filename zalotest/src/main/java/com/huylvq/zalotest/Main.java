@@ -6,10 +6,6 @@
 package com.huylvq.zalotest;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.concurrent.ExecutionException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -17,31 +13,24 @@ import java.util.logging.Logger;
  */
 public class Main {
 
+    /**
+     *
+     * @param args
+     */
     public static void main(String[] args) {
-        try {
-            if (args.length != 2) {
-                System.err.println("Invalid input!");
-                return;
-            }
-            String inputFile = args[0];
-            String outputFile = args[1];
-//        System.out.println(inputFile);
-//        System.out.println(outputFile);
-//        File file = new File(".");
-//        for (String fileNames : file.list()) {
-//            System.out.println(fileNames);
-//        }
-//        System.out.println("Working Directory = "
-//                + System.getProperty("user.dir"));
-            File file = new File(inputFile);
-            if (!file.exists() || file.isDirectory()) {
-                System.err.println(inputFile + " does not exist! Exitting!");
-                return;
-            }
-            SortBigFile sort = new SortBigFile();
-            sort.sort(inputFile, outputFile);
-        } catch (InterruptedException | ExecutionException | IOException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
+        if (args.length != 2) {
+            System.err.println("Invalid input!");
+            return;
         }
+        String inputFile = args[0];
+        String outputFile = args[1];
+        File file = new File(inputFile);
+        if (!file.exists() || file.isDirectory()) {
+            System.err.println(inputFile + " does not exist! Exitting!");
+            return;
+        }
+        SortBigFile sorter = new SortBigFile(inputFile, outputFile);
+        //SortBigFileUsingMultithread sorter = new SortBigFileUsingMultithread(inputFile, outputFile);
+        sorter.sort();
     }
 }

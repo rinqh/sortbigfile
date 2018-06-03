@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.huylvq.zalotest;
+package com.huylvq.zalotest.data;
 
 import java.io.File;
 import java.util.List;
@@ -13,9 +13,22 @@ import java.util.List;
  * @author Rin
  */
 public class MyData {
-    List<String> lines;
-    File file;
 
+    /**
+     *
+     */
+    public List<String> lines;
+
+    /**
+     *
+     */
+    public File file;
+
+    /**
+     *
+     * @param lines
+     * @param file
+     */
     public MyData(List<String> lines, File file) {
         this.lines = lines;
         this.file = file;

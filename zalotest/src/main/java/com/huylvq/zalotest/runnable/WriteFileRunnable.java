@@ -3,8 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.huylvq.zalotest;
+package com.huylvq.zalotest.runnable;
 
+import com.huylvq.zalotest.data.MyData;
+import com.huylvq.zalotest.data.MyQueue;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -20,9 +22,17 @@ public class WriteFileRunnable implements Runnable {
     private String name;
     private MyQueue queue;
 
+    /**
+     *
+     */
     public WriteFileRunnable() {
     }
 
+    /**
+     *
+     * @param name
+     * @param queue
+     */
     public WriteFileRunnable(String name, MyQueue queue) {
         this.name = name;
         this.queue = queue;

@@ -3,8 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.huylvq.zalotest;
+package com.huylvq.zalotest.runnable;
 
+import com.huylvq.zalotest.data.CompareWrapper;
+import com.huylvq.zalotest.data.Wrapper;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -26,6 +28,22 @@ public class MergeFileRunnable implements Runnable {
     private final BlockingQueue queue;
     int maxBlockSize;
 
+    /**
+     *
+     * @param listFiles
+     * @param queue
+     */
+    public MergeFileRunnable(List<File> listFiles, BlockingQueue queue) {
+        this.listFiles = listFiles;
+        this.queue = queue;
+    }
+    
+    /**
+     *
+     * @param listFiles
+     * @param queue
+     * @param maxBlockSize
+     */
     public MergeFileRunnable(List<File> listFiles, BlockingQueue queue, int maxBlockSize) {
         this.listFiles = listFiles;
         this.queue = queue;
