@@ -77,7 +77,7 @@ public class SortBigFileUsingMultithreadTest {
         } finally {
             if (writer != null) {
                 try {
-                    writer.close();
+                    writer.flush();
                     writer.close();
                 } catch (IOException ex) {
                     Logger.getLogger(SortBigFileUsingMultithreadTest.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
@@ -92,10 +92,12 @@ public class SortBigFileUsingMultithreadTest {
         File fileInput = new File(inputFile);
         if (fileInput.exists()) {
             fileInput.delete();
+            //System.out.println("Delete Test input");
         }
         File fileOutput = new File(outputFile);
         if (fileOutput.exists()) {
             fileOutput.delete();
+            //System.out.println("Delete Test output");
         }
     }
 

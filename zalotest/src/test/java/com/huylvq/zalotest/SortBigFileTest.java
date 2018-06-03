@@ -91,10 +91,12 @@ public class SortBigFileTest {
         File fileInput = new File(inputFile);
         if (fileInput.exists()) {
             fileInput.delete();
+            //System.out.println("Delete Test input");
         }
         File fileOutput = new File(outputFile);
         if (fileOutput.exists()) {
             fileOutput.delete();
+            //System.out.println("Delete Test output");
         }
     }
 

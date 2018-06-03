@@ -34,6 +34,7 @@ public class SortBigFile {
     private String inputFile;
     private String outputFile;
     private final List<File> tmpFiles = new ArrayList<>();
+    private boolean firstWrite = true;
 
     SortBigFile() {
     }
@@ -43,7 +44,6 @@ public class SortBigFile {
         this.outputFile = outputFile;
     }
 
-    
     void sort() {
 //        System.out.println("Starting " + System.currentTimeMillis());
         splitInput(inputFile);
@@ -121,7 +121,7 @@ public class SortBigFile {
      */
     public void mergeSort(String outputFile) {
         int currentSize = 0;
-        
+
         List<String> writes = new ArrayList<>();
         List<Wrapper> wrappers = new ArrayList<>();
         CompareWrapper compare = new CompareWrapper();
@@ -195,8 +195,12 @@ public class SortBigFile {
 
     private void appendFile(List<String> writes, BufferedWriter writer) throws IOException {
         for (String s : writes) {
+            if (firstWrite) {
+                firstWrite = false;
+            } else {
+                writer.newLine();
+            }
             writer.write(s);
-            writer.newLine();
         }
     }
 

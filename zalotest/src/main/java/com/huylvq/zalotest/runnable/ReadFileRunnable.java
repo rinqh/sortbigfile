@@ -66,10 +66,10 @@ public class ReadFileRunnable implements Runnable {
 
     @Override
     public void run() {
+        int currentSize = 0;
+        BufferedReader br = null;
         try {
-//            boolean test = true;
-            int currentSize = 0;
-            BufferedReader br = null;
+//          boolean test = true;
             br = new BufferedReader(new FileReader(input));
             List<String> lines = new ArrayList<>();
             String line = null;
@@ -101,6 +101,15 @@ public class ReadFileRunnable implements Runnable {
         } catch (IOException | InterruptedException ex) {
             Logger.getLogger(ReadFileRunnable.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
             queue.continueProducing = Boolean.FALSE;
+        } finally {
+//            System.out.println(tmpFiles.size());
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException ex) {
+                    Logger.getLogger(ReadFileRunnable.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
+                }
+            }
         }
     }
 

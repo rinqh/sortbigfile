@@ -36,6 +36,8 @@ public class SortBigFileUsingMultithread {
     private String inputFile;
     private String outputFile;
     private List<File> tmpFiles;
+    
+   private boolean firstWrite = true;
 
     /**
      *
@@ -58,7 +60,7 @@ public class SortBigFileUsingMultithread {
     /**
      *
      */
-    public void sort(){
+    public void sort() {
         try {
 //            System.out.println("Starting " + System.currentTimeMillis());
             splitInput();
@@ -98,7 +100,7 @@ public class SortBigFileUsingMultithread {
 
     /**
      *
-     * 
+     *
      */
     private void mergeFile() {
         ExecutorService exec = Executors.newSingleThreadExecutor();
@@ -112,8 +114,12 @@ public class SortBigFileUsingMultithread {
             while (true) {
                 line = queue.poll(1, TimeUnit.SECONDS);
                 if (line != null) {
+                    if (firstWrite) {
+                        firstWrite = false;
+                    } else {
+                        writer.newLine();
+                    }
                     writer.write(line);
-                    writer.newLine();
                 }
                 if (f.isDone() && queue.isEmpty()) {
                     break;
