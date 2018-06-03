@@ -82,7 +82,7 @@ public class SortBigFile {
         } catch (IOException ex) {
             Logger.getLogger(SortBigFile.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
         } finally {
-            System.out.println(tmpFiles.size());
+//            System.out.println(tmpFiles.size());
             if (br != null) {
                 try {
                     br.close();

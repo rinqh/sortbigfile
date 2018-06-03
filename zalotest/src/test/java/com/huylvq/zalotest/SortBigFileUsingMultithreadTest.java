@@ -104,7 +104,7 @@ public class SortBigFileUsingMultithreadTest {
      */
     @Test
     public void testSort() {
-        System.out.println("sort");
+        System.out.println("Multithread sort");
         SortBigFileUsingMultithread instance = new SortBigFileUsingMultithread(inputFile, outputFile);
         instance.sort();
 

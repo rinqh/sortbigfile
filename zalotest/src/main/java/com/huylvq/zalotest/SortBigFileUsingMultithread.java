@@ -93,7 +93,7 @@ public class SortBigFileUsingMultithread {
             f.get();
         }
         executor.shutdown();
-        System.out.println(tmpFiles.size());
+//        System.out.println(tmpFiles.size());
     }
 
     /**

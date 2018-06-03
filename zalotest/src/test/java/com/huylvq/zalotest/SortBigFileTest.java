@@ -103,7 +103,7 @@ public class SortBigFileTest {
      */
     @org.junit.Test
     public void testSort() {
-        System.out.println("sort");
+        System.out.println("Single thread sort");
         SortBigFile instance = new SortBigFile(inputFile, outputFile);
         instance.sort();
         BufferedReader br = null;
