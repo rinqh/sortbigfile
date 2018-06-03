@@ -8,13 +8,13 @@
   - Lặp lại cho tới khi không còn phần tử nào trong các file tạm
 # Run
 ```
-java -jar target/zalotest-1.0-SNAPSHOT.jar input.txt output.txt
+java -jar target/sortbigfile-1.0-SNAPSHOT.jar input.txt output.txt
 Trong đó: input.txt: input file
           output.txt: output file
 ```
 # Sample code
 ```
-import com.huylvq.zalotest;
+import com.huylvq.sortbigfile;
 
 //... inputFile: input file name
 //... outputFile: output file name
@@ -40,7 +40,7 @@ Idea:
 
 # Run
 ```
-java -jar target/zalotest-1.0-SNAPSHOT.jar input.txt output.txt
+java -jar target/sortbigfile-1.0-SNAPSHOT.jar input.txt output.txt
 
 with input.txt: input file
      output.txt: output file
