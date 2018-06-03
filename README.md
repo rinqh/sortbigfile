@@ -7,11 +7,13 @@
   - Lấy phần tử tiếp theo trong file chứa phần tử vừa lưu vào file
   - Lặp lại cho tới khi không còn phần tử nào trong các file tạm
 # Run
+```
 java -jar target/zalotest-1.0-SNAPSHOT.jar input.txt output.txt
 Trong đó: input.txt: input file
           output.txt: output file
-
+```
 # Sample code
+```
 import com.huylvq.zalotest;
 
 //... inputFile: input file name
@@ -21,11 +23,10 @@ import com.huylvq.zalotest;
 SortBigFile sorter = new SortBigFile(inputFile, outputFile);
 sorter.sort();
 
-
 // Use multithread sort
 SortBigFileUsingMultithread sorter = new SortBigFileUsingMultithread(inputFile, outputFile);
 sorter.sort();
-
+```
 # Sort Big File in Java
 Idea:
   - Read input file line by line into memory
@@ -38,9 +39,10 @@ Idea:
   - Continue until no string left in list
 
 # Run
+```
 java -jar target/zalotest-1.0-SNAPSHOT.jar input.txt output.txt
 
 with input.txt: input file
      output.txt: output file
-
+```
   
